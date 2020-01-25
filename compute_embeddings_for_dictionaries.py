@@ -27,7 +27,7 @@ def compute_embeddings_for_the_dictionary(data_path, files_to_encode):
 
             df['embedding'] = list(message_embedding)
 
-        df.to_csv(os.path.join(os.path.join(data_path, f'emb_{file_to_encode}')))
+        df.to_pickle(os.path.join(os.path.join(data_path, f'emb_{file_to_encode.split(".")[0]}.pickle')))
 
 
 if __name__ == '__main__':
