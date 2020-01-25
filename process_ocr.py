@@ -4,7 +4,7 @@ import io
 import json
 
 from google.cloud import storage, vision
-from google.protobuf.json_format import MessageToJson
+from google.protobuf.json_format import MessageToDict
 
 
 class FeatureType(Enum):
@@ -64,7 +64,7 @@ def get_document_text(uri):
     response = vision_client.document_text_detection(image=image)
     document = response.full_text_annotation
 
-    message_json = MessageToJson(response)
+    message = MessageToDict(response)
 
     bounds = {i: [] for i in FeatureType}
 
@@ -81,7 +81,41 @@ def get_document_text(uri):
 
             bounds[FeatureType.BLOCK].append(block.bounding_box)
 
-    return bounds, message_json
+    return bounds, message
+
+
+def _is_color_similar(a, b, eps=EPS):
+    return all(abs(a[i] - b[i]) < eps for i in range(len(a)))
+
+
+def get_main_color(image, box):
+    """
+    :param image: An image
+    :param box: Bounding box vertices, not necessarily axis aligned
+        [{'x': 1608, 'y': 243},
+         {'x': 2853, 'y': 243},
+         {'x': 2853, 'y': 356},
+         {'x': 1608, 'y': 356}]
+    :return: main color
+    """
+
+    left = min(v["x"] for v in box)
+    top = min(v["y"] for v in box)
+    right = max(v["x"] for v in box)
+    bottom = max(v["y"] for v in box)
+
+    cropped = image.copy().crop((left, top, right, bottom))
+
+    colors = cropped.getcolors(cropped.size[0] * cropped.size[1])
+    ordered = sorted(colors, key=lambda x: x[0], reverse=True)
+
+    EPS = 16
+
+    for _, col in ordered:
+        if _is_color_similar(col, COLORS_OF_WORDS["white"], EPS):
+            continue
+
+        return col
 
 
 def render_doc_text(uri, *levels):
@@ -102,50 +136,25 @@ def render_doc_text(uri, *levels):
 
     image = Image.open(buffer)
 
-    bounds, message_json = get_document_text(uri)
+    bounds, message = get_document_text(uri)
 
     for level in levels:
         if hasattr(FeatureType, level):
             param = getattr(FeatureType, level)
             draw_boxes(image, bounds[param], COLORS[param])
 
+    for page in message["fullTextAnnotation"]["pages"]:
+        for block in page["blocks"]:
+            for paragraphs in block["paragraphs"]:
+                for i in range(len(paragraphs["words"])):
+                    main_color = get_main_color(
+                        image, paragraphs["words"][i]["boundingBox"]["vertices"]
+                    )
+                    paragraphs["words"][i]["color"] = main_color
+
     image.save(f"files/annotated/{filename}.jpg")
 
     with open(f"files/ocr/{filename}.json", "w+") as fd:
-        fd.write(message_json)
+        json.dump(message, fd)
 
     return image
-
-
-def _is_color_similar(a, b, eps=EPS):
-    return all(abs(a[i] - b[i]) < eps for i in range(len(a)))
-
-
-def get_main_color(image, box):
-    """
-    :param image: An image
-    :param box: Bounding box vertices, not necessarily axis aligned
-        [{'x': 1608, 'y': 243},
-         {'x': 2853, 'y': 243},
-         {'x': 2853, 'y': 356},
-         {'x': 1608, 'y': 356}]
-    :return: main color
-    """
-
-    left = min(v["x"] for v in box)
-    top = max(v["y"] for v in box)
-    right = max(v["x"] for v in box)
-    bottom = min(v["y"] for v in box)
-
-    cropped = image.copy().crop((left, top, right, bottom)).load()
-
-    colors = cropped.getcolors(cropped.shape[0] * cropped.shape[1])
-    ordered = sorted(colors, key=lambda x: x[0], reverse=True)
-
-    EPS = 16
-
-    for _, col in ordered:
-        if _is_color_similar(col, COLORS_OF_WORDS["white"], EPS):
-            continue
-
-        return col
