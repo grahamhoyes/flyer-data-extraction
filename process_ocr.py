@@ -35,6 +35,16 @@ COLORS_OF_WORDS = {
 
 
 def draw_boxes(image, bounds, color):
+    """
+    :param image: a PIL image
+    :param bounds: Bounding box vertices, not necessarily axis aligned
+        [{'x': 1608, 'y': 243},
+         {'x': 2853, 'y': 243},
+         {'x': 2853, 'y': 356},
+         {'x': 1608, 'y': 356}]
+    :param color: color to draw the box
+    :return:
+    """
     draw = ImageDraw.Draw(image)
 
     for bound in bounds:
@@ -56,6 +66,10 @@ def draw_boxes(image, bounds, color):
 
 
 def get_document_text(uri):
+    """
+    Run OCR on a GCS file
+    :param uri: Storage URI
+    """
     vision_client = vision.ImageAnnotatorClient()
 
     image = vision.types.Image()
@@ -119,6 +133,12 @@ def get_main_color(image, box):
 
 
 def render_doc_text(uri, *levels):
+    """
+    Top level handler for process_ocr
+    :param uri: storage URI
+    :param levels: list of levels to draw boxes from FeatureType
+    :return:
+    """
     split_uri = uri[5:].split("/")
     bucket = split_uri[0]
     path = "/".join(split_uri[1:])
