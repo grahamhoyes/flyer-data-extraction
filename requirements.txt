@@ -6,6 +6,7 @@ certifi==2019.11.28
 chardet==3.0.4
 cycler==0.10.0
 decorator==4.4.1
+fuzzywuzzy==0.17.0
 gast==0.3.3
 google-api-core==1.16.0
 googleapis-common-protos==1.51.0
@@ -38,7 +39,9 @@ ptyprocess==0.6.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 Pygments==2.5.2
+pyparsing==2.4.6
 python-dateutil==2.8.1
+python-Levenshtein==0.12.0
 pytz==2019.3
 requests==2.22.0
 rsa==4.0
