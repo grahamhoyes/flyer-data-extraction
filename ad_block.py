@@ -88,6 +88,3 @@ class AdBlock:
             self.discount = self.save_per_unit / (self.unit_promo_price + self.save_per_unit)
         except:
             pass
-
-
-
