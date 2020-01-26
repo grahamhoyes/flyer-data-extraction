@@ -289,6 +289,8 @@ def identify_products(images):
         with open(os.path.join(save_path, title + ".json"), "w") as f:
             json.dump(flyer_json, f)
 
+        print(f"Done {count}/{len(images)}")
+
     df = pd.DataFrame(data, columns=columns)
     df.to_csv("output.csv", index=False)
 
