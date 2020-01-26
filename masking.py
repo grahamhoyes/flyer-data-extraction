@@ -77,7 +77,7 @@ def mask_image(image):
 
 def main():
     # indices = np.random.choice(len(images), size=num_images, replace=False)
-
+    
     start_time = time.time()
     for i in range(len(images)):
         image = Image.open(os.path.join(images_path, images[i]))
