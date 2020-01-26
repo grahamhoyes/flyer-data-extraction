@@ -254,7 +254,7 @@ def identify_products(images):
             non_product_blocks[i]["text"] = block_text
 
             if num_red_words / num_words > 0.7:
-                red_blocks.append(blocks[i])
+                red_blocks.append(non_product_blocks[i])
 
         for block in blocks:
             ad = AdBlock(title, block["product"])
