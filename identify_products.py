@@ -251,4 +251,4 @@ if __name__ == "__main__":
     # pool.close()
     # pool.join()
 
-    identify_products(["week_10_page_1.jpg"])
+    identify_products(images[:10])

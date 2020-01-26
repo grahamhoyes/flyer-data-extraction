@@ -1,12 +1,114 @@
 flyer_name,product_name,unit_promo_price,uom,least_unit_for_promo,save_per_unit,discount,organic
-week_10_page_1,Flour,,,1,,,0
-week_10_page_1,Organic Gala Apples,,3 lb,1,3.00,,1
-week_10_page_1,Ground Round,,,1,3.00,,0
-week_10_page_1,Blueberries,,,1,2.00,,0
-week_10_page_1,Alaska Coho Salmon Fillets,6.00,lb,1,6.00,0.50,0
-week_10_page_1,Organic Red & Green Seedless Grapes,2.99,lb,1,1.00,0.25,1
-week_10_page_1,NY Strips,6.00,lb,1,6.00,0.50,0
-week_10_page_1,Organic Kale,,,2,1.00,,1
-week_10_page_1,Whole Chickens,,,1,1.00,,0
-week_10_page_1,Cooked Tail-On Shrimp,9.99,lb,1,5.00,0.33,0
-week_10_page_1,Napa Chicken Salad,2.00,lb,1,2.00,0.50,0
+week_22_page_4,Organic Gala Apples,,3 lb,1,2.00,,1
+week_22_page_4,Asparagus,4.00,lb,1,4.00,0.50,0
+week_22_page_4,Asparagus,4.00,lb,1,4.00,0.50,0
+week_22_page_4,Asparagus,4.00,lb,1,4.00,0.50,0
+week_22_page_4,Organic Cucumbers,,,1,2.00,,1
+week_22_page_4,Organic Navel Oranges,1.00,lb,1,1.00,0.50,1
+week_22_page_4,Cherries,3.00,lb,1,3.00,0.50,0
+week_22_page_4,Organic Kale,,,2,1.00,,1
+week_22_page_4,Stress Relax Formulas,,,1,,,0
+week_22_page_4,5 lb. Bag Organic Russet Potatoes,,5 lb,1,2.00,,1
+week_22_page_4,Protein & Greens,,,1,,,0
+week_51_page_1,Blueberries,3.99,,1,,,0
+week_51_page_1,Organic Red & Green Seedless Grapes,2.99,lb,1,,,1
+week_51_page_1,Organic Strawberries,,1 lb,1,,,1
+week_51_page_1,Wild Salmon,5.00,lb,1,5.00,0.50,0
+week_51_page_1,White Shrimp,3.00,lb,1,3.00,0.50,0
+week_51_page_1,Pork Sausages,3.99,,1,,,0
+week_51_page_1,Pork Tenderloin,6.99,lb,1,4.00,0.36,0
+week_51_page_1,Blackened Chicken Salad,6.99,lb,1,4.00,0.36,0
+week_51_page_1,Brand Wide Sale,,,1,,,0
+week_51_page_1,Kombucha,,16 oz,1,1.00,,0
+week_51_page_1,Filet Mignon,6.99,lb,1,4.00,0.36,0
+week_51_page_1,Filet Mignon,6.99,lb,1,4.00,0.36,0
+week_22_page_3,Oven Roasted Turkey,9.99,lb,1,2.00,0.17,0
+week_22_page_3,5-Pack Cookies,,,1,1.00,,0
+week_22_page_3,Snacking Rounds,,,1,0.0,,0
+week_22_page_3,Vegan Mock Chicken Salad,3.00,lb,1,3.00,0.50,0
+week_22_page_3,English Muffins,,,1,1.00,,0
+week_22_page_3,4-Pack Croissants,,,1,2.00,,0
+week_22_page_3,Indian Meals On-The-Go,5.00,,2,5.00,0.50,0
+week_22_page_3,Hummus,,8 oz,1,3.00,,0
+week_22_page_3,Energy Seed Salad,,7 oz,1,1.00,,0
+week_22_page_3,Prosecco,,750 ml,1,10.00,,0
+week_22_page_3,Coffee,,12 oz,1,2.00,,0
+week_22_page_3,Pinot Grigio,,,1,6.00,,0
+week_17_page_3,Noodle & Rice Bowls,,14 oz,1,5.00,,0
+week_17_page_3,ORGANIC BAGUETTE,,,1,1.00,,1
+week_17_page_3,ORGANIC BAGUETTE,,,1,1.00,,1
+week_17_page_3,"Sweet Potato, Quinoa, & Kale",4.99,lb,1,2.00,0.29,0
+week_17_page_3,5-Pack Cookie Sandwiches,,,1,1.00,,0
+week_17_page_3,2-Pack Cups,,,1,1.00,,0
+week_17_page_3,8-Pack Mini Croissants,,,1,1.00,,0
+week_17_page_3,8-Pack Mini Croissants,,,1,1.00,,0
+week_17_page_3,Loaf Bread,,24 oz,1,0.0,,0
+week_17_page_3,Chai Spiced Smoothie,,,1,1.00,,0
+week_17_page_3,Wines,,750 ml,1,9.00,,0
+week_17_page_3,Cupcakes,,,1,1.00,,0
+week_17_page_3,Prosecco,,,1,3.00,,0
+week_5_page_2,Morning Rounds,,,1,0.0,,0
+week_5_page_2,Organic Flour Tortillas,,,2,0.09,,1
+week_5_page_2,Kid's Wheat & White Loaf Bread,,18 oz,1,,,0
+week_5_page_2,10-Pack Mini Cookies,,,1,0.0,,0
+week_5_page_2,Snackables & Samplers,,,1,1.00,,0
+week_5_page_2,Sharp Cheddar Cheese,7.99,lb,1,2.00,0.20,0
+week_5_page_2,Guacamole,,15 oz,1,1.00,,0
+week_5_page_2,Oven Roasted Turkey Breast,2.00,lb,1,2.00,0.50,0
+week_5_page_2,Oven Roasted Turkey Breast,2.00,lb,1,2.00,0.50,0
+week_5_page_2,Red Sunset Juice,,20 oz,1,,,0
+week_5_page_2,Broccoli Cranberry Salad,6.99,lb,1,1.00,0.13,0
+week_5_page_2,Greek Salad,,7 oz,1,1.00,,0
+week_5_page_2,Cabernet & Chardonnay,,,1,3.00,,0
+week_30_page_1,Valencia Oranges,,4 lb,1,7.00,,0
+week_30_page_1,Salads,,5 oz,1,3.00,,0
+week_30_page_1,Scottish Salmon,0.14,,1,,,0
+week_30_page_1,"Grass Fed Yougurt, & Cheese",0.13,,1,,,0
+week_30_page_1,"Boneless, Skinless Chicken Breast",5.00,,1,,,0
+week_30_page_1,Wild American Shrimp,0.11,,1,,,0
+week_30_page_1,Strip,,,1,,,0
+week_30_page_1,Take & Bake Pizza,,,1,9.00,,0
+week_30_page_1,Zero Calorie Soda,,,1,5.00,,0
+week_30_page_1,Laundry Detergent,,100 oz,1,0.13,,0
+week_19_page_2,Yogurt,,,1,1.00,,0
+week_19_page_2,Yogurt,,,1,1.00,,0
+week_19_page_2,Frozen Vegetables,,10 oz,1,,,0
+week_19_page_2,Crackers,,5 oz,1,1.00,,0
+week_19_page_2,Organic Soups,,5 oz,1,1.00,,1
+week_19_page_2,Potato Chips,,5 oz,1,2.00,,0
+week_19_page_2,Gelato,,30 oz,1,,,0
+week_19_page_2,Pasta,,16 oz,1,,,0
+week_19_page_2,Ice Cream,,,1,1.00,,0
+week_19_page_2,Organic Mediterranean Blend Extra Virgin Olive Oil,,,1,2.00,,1
+week_19_page_2,Organic Frozen Thin Crust Pizzas,,13 oz,1,1.00,,1
+week_19_page_2,Organic Raw Whole Cashews,12.99,lb,1,2.00,0.13,1
+week_46_page_2,Bunny Crackers,,9 oz,1,4.00,,0
+week_46_page_2,Yogurt,,24 oz,1,1.00,,0
+week_46_page_2,Sparkling Water,,8 oz,1,1.00,,0
+week_46_page_2,Cereal,,14 oz,1,2.00,,0
+week_46_page_2,Tortilla Chips,,11 oz,1,1.00,,0
+week_46_page_2,Frozen Vegetables,,10 oz,1,1.00,,0
+week_46_page_2,BBQ Sauces,,15 oz,1,,,0
+week_46_page_2,Mustard,,12 oz,1,0.0,,0
+week_46_page_2,Organic Ketchup,,20 oz,1,0.0,,1
+week_46_page_2,Kettle Chips,,5 oz,1,,,0
+week_46_page_2,Frozen Angus Burger Patties,,,1,2.00,,0
+week_46_page_2,Cookies,,20 oz,1,,,0
+week_1_page_1,Ground Sirloin or Round,4.00,lb,1,4.00,0.50,0
+week_1_page_1,Whole Ribeyes & Strips,3.00,lb,1,3.00,0.50,0
+week_1_page_1,Sockeye Salmon Fillets,,,1,10.00,,0
+week_1_page_1,Whole Chicken,,,1,,,0
+week_1_page_1,Organic Strawberries,,1 lb,1,5.00,,1
+week_1_page_1,Organic Red & Green Seedless Grapes,2.99,lb,1,1.00,0.25,1
+week_1_page_1,Bone-In Pork Chops,2.00,lb,1,2.00,0.50,0
+week_1_page_1,Blueberries,,,1,6.00,,0
+week_1_page_1,Wild Bourbon Salmon Fillets,,,1,3.00,,0
+week_1_page_1,Blackened Chicken Salad,2.00,lb,1,2.00,0.50,0
+week_1_page_1,Hass Avocados,,,4,1.00,,0
+week_30_page_3,Organic Soup Cups,,16 oz,1,5.00,,1
+week_30_page_3,10-Pack Mini Cookies,,,1,4.00,,0
+week_30_page_3,Grilled Chicken Caesar Salad,,7 oz,1,4.00,,0
+week_30_page_3,Egg Rolls & Spring Rolls,,,1,1.00,,0
+week_30_page_3,Cupcakes,,,1,6.00,,0
+week_30_page_3,One Bun,,21 oz,1,4.00,,0
+week_30_page_3,Morning Rounds,,7 oz,1,4.00,,0
