@@ -45,8 +45,11 @@ class AdBlock:
         self.is_half_off = True
 
     def set_percentage_off(self, discount):
+        if self.is_percentage_off is True:
+            self.discount += discount
+            return
         self.is_percentage_off = True
-        self.discount = discount
+        self.discount = float(discount)/100
 
     def set_dollar_off(self, dollar_off, is_cents):
         self.save_per_unit = self.convert_to_dollars(dollar_off, is_cents)
@@ -75,6 +78,11 @@ class AdBlock:
         self.uom = unit
 
     def combine_information(self):
+
+        if self.is_buy_one_get_one_free or self.is_half_off:
+            self.discount = 0.5
+            if self.unit_promo_price is not None:
+                self.save_per_unit = self.unit_promo_price
 
         try:
             self.discount = self.save_per_unit / (self.unit_promo_price + self.save_per_unit)

@@ -27,6 +27,7 @@ CENT_PRICE = re.compile(r"([0-9]+)¢")
 BUY_ONE_GET_ONE_FREE = re.compile(r"BUY\sONE,*\sGET\sONE\sFREE")
 HALF_OFF = re.compile(r"HALF\sOFF")
 PERCENTAGE_OFF = re.compile(r"([0-9]+)%\sOFF")
+RECEIVE_AN_EXTRA_PERCENTAGE_OFF = re.compile(r"RECEIVE\sAN\sEXTRA\s([0-9]+)%\sOFF")
 
 DOLLAR_OFF_PER_POUND = re.compile(r"\$([0-9]+)\sOFF\sPER\sPOUND")
 CENT_OFF_PER_POUND = re.compile(r"([0-9]+)¢\sOFF\sPER\sPOUND")
@@ -36,17 +37,19 @@ CENT_OFF = re.compile(r"([0-9]+)¢\sOFF")
 
 
 # Savings
-SAVE_CENTS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}([0-9]+)¢/(" + "|".join(get_units()) + r") on ([0-9]+)")  # SAVE (up to) 98¢ on 2/lb
-SAVE_DOLLARS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}\$([0-9]+)/(" + "|".join(get_units()) + r") on ([0-9]+)")
+SAVE_CENTS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}([0-9]+)¢/(" + "|".join(get_units()) + r")\son\s([0-9]+)")  # SAVE (up to) 98¢ on 2/lb
+SAVE_DOLLARS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}\$([0-9]+)/(" + "|".join(get_units()) + r")\son\s([0-9]+)")
 
 DOLLAR_SAVE_PER_UNIT = re.compile(r"SAVE.{0,7}\$([0-9]+)/(" + "|".join(get_units()) + r")")
 CENT_SAVE_PER_UNIT = re.compile(r"SAVE.{0,7}([0-9]+)¢/(" + "|".join(get_units()) + r")")
 
-SAVE_CENTS_ON = re.compile(r"SAVE.{0,7}([0-9]+)¢ on ([0-9]+)")  # SAVE (up to) 98¢ on 2
-SAVE_DOLLARS_ON = re.compile(r"SAVE.{0,7}\$([0-9]+) on ([0-9]+)")
+SAVE_CENTS_ON = re.compile(r"SAVE.{0,7}([0-9]+)¢\son\s([0-9]+)")  # SAVE (up to) 98¢ on 2
+SAVE_DOLLARS_ON = re.compile(r"SAVE.{0,7}\$([0-9]+)\son\s([0-9]+)")
 
 DOLLAR_SAVE = re.compile(r"SAVE.{0,7}\$([0-9]+)")
 CENT_SAVE = re.compile(r"SAVE.{0,7}([0-9]+)¢")
+
+
 
 
 def match_price_in_block(text, ad: AdBlock):
@@ -124,3 +127,8 @@ def match_price_in_block(text, ad: AdBlock):
         ad.set_save_dollars(ds_match.group(1), False)
     elif cs_match:
         ad.set_save_dollars(cs_match.group(1), True)
+
+    raedo_match = RECEIVE_AN_EXTRA_PERCENTAGE_OFF.match(text, re.IGNORECASE)
+
+    if raedo_match:
+        ad.set_percentage_off(raedo_match.group(1))
