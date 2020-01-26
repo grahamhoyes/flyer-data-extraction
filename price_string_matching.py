@@ -14,8 +14,8 @@
 #   \$([0-9]+) OFF
 #   ([0-9]+)\¢ OFF
 
-#   \$([0-9]+) OFF PER (lb|bag)
-#   ([0-9]+)\¢ OFF PER (lb|bag)
+#   \$([0-9]+) OFF PER POUND
+#   ([0-9]+)\¢ OFF PER POUND
 
 
 
