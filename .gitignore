@@ -130,5 +130,4 @@ dmypy.json
 .pyre/
 
 # Project files
-files/ocr/
 files/annotated/
