@@ -8,7 +8,7 @@ class AdBlock:
         self.least_unit_for_promo = 1
         self.save_per_unit = ""
         self.discount = ""
-        self.organic = ""
+        self.organic = "organic" in product_name.to_lowercase()
 
     def set_dollar_price_per_unit(self, price, unit):
         self.unit_promo_price = price
