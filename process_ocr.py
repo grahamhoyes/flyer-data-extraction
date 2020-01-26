@@ -2,6 +2,7 @@ from enum import Enum
 from PIL import Image, ImageDraw
 import io
 import json
+from multiprocessing.pool import Pool
 
 from google.cloud import storage, vision
 from google.protobuf.json_format import MessageToDict
@@ -178,3 +179,35 @@ def render_doc_text(uri, *levels):
         json.dump(message, fd)
 
     return image
+
+
+def _render_doc_text_parallel(args):
+    return render_doc_text(*args)
+
+
+def process_all(bucket_name, folder):
+    client = storage.Client()
+    bucket = client.get_bucket(bucket_name)
+    params = []
+    for i, blob in enumerate(bucket.list_blobs(prefix=folder)):
+        if blob.name.endswith("/"):
+            continue
+
+        uri = f"gs://{bucket_name}/{blob.name}"
+        params.append((uri, "WORD", "BLOCK"))
+
+    pool = Pool(processes=8, maxtasksperchild=1000)
+
+    i = 0
+    for _ in pool.imap_unordered(_render_doc_text_parallel, params, chunksize=16):
+        i += 1
+
+        if i % 10 == 0:
+            print(f"{i}/{len(params)}")
+
+    pool.close()
+    pool.join()
+
+
+if __name__ == "__main__":
+    process_all("daisy-data", "cleaned_images")
