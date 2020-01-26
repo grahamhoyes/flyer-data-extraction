@@ -70,21 +70,22 @@ def match_price_in_block(text, ad: AdBlock):
     :return:
     """
     found_some_price_thing = True
+    do_first_catchall = do_second_catchall = False
 
     # Prices
-    dppu_match = DOLLAR_PRICE_PER_UNIT.match(text, re.IGNORECASE)
-    cppu_match = CENT_PRICE_PER_UNIT.match(text, re.IGNORECASE)
-    updp_match = UNITS_PER_DOLLAR_PRICE.match(text, re.IGNORECASE)
-    upcp_match = UNITS_PER_CENT_PRICE.match(text, re.IGNORECASE)
-    dp_match = DOLLAR_PRICE.match(text, re.IGNORECASE)
-    cp_match = CENT_PRICE.match(text, re.IGNORECASE)
-    bogo_match = BUY_ONE_GET_ONE_FREE.match(text, re.IGNORECASE)
-    ho_match = HALF_OFF.match(text, re.IGNORECASE)
-    po_match = PERCENTAGE_OFF.match(text, re.IGNORECASE)
-    dopp_match = DOLLAR_OFF_PER_POUND.match(text, re.IGNORECASE)
-    copp_match = CENT_OFF_PER_POUND.match(text, re.IGNORECASE)
-    do_match = DOLLAR_OFF.match(text, re.IGNORECASE)
-    co_match = CENT_OFF.match(text, re.IGNORECASE)
+    dppu_match = DOLLAR_PRICE_PER_UNIT.search(text)
+    cppu_match = CENT_PRICE_PER_UNIT.search(text)
+    updp_match = UNITS_PER_DOLLAR_PRICE.search(text)
+    upcp_match = UNITS_PER_CENT_PRICE.search(text)
+    dp_match = DOLLAR_PRICE.search(text)
+    cp_match = CENT_PRICE.search(text)
+    bogo_match = BUY_ONE_GET_ONE_FREE.search(text)
+    ho_match = HALF_OFF.search(text)
+    po_match = PERCENTAGE_OFF.search(text)
+    dopp_match = DOLLAR_OFF_PER_POUND.search(text)
+    copp_match = CENT_OFF_PER_POUND.search(text)
+    do_match = DOLLAR_OFF.search(text)
+    co_match = CENT_OFF.search(text)
 
     if dppu_match:
         ad.set_dollar_price_per_unit(dppu_match.group(1), dppu_match.group(2), False)
@@ -108,22 +109,19 @@ def match_price_in_block(text, ad: AdBlock):
         ad.set_dollar_off(do_match.group(1), False)
     elif co_match:
         ad.set_dollar_off(co_match.group(1), True)
-    elif dp_match:
-        ad.set_dollar_price(dp_match.group(1), False)
-    elif cp_match:
-        ad.set_dollar_price(cp_match.group(1), True)
     else:
+        do_first_catchall = True
         found_some_price_thing = False
 
     # Savings
-    sdopu_match = SAVE_DOLLARS_ON_PER_UNIT.match(text, re.IGNORECASE)
-    scopu_match = SAVE_CENTS_ON_PER_UNIT.match(text, re.IGNORECASE)
-    dspu_match = DOLLAR_SAVE_PER_UNIT.match(text, re.IGNORECASE)
-    cspu_match = CENT_SAVE_PER_UNIT.match(text, re.IGNORECASE)
-    sdo_match = SAVE_DOLLARS_ON.match(text, re.IGNORECASE)
-    sco_match = SAVE_CENTS_ON.match(text, re.IGNORECASE)
-    ds_match = DOLLAR_SAVE.match(text, re.IGNORECASE)
-    cs_match = CENT_SAVE.match(text, re.IGNORECASE)
+    sdopu_match = SAVE_DOLLARS_ON_PER_UNIT.search(text)
+    scopu_match = SAVE_CENTS_ON_PER_UNIT.search(text)
+    dspu_match = DOLLAR_SAVE_PER_UNIT.search(text)
+    cspu_match = CENT_SAVE_PER_UNIT.search(text)
+    sdo_match = SAVE_DOLLARS_ON.search(text)
+    sco_match = SAVE_CENTS_ON.search(text)
+    ds_match = DOLLAR_SAVE.search(text)
+    cs_match = CENT_SAVE.search(text)
 
     if sdopu_match:
         ad.set_save_dollars_per_unit_on_units(
@@ -145,14 +143,23 @@ def match_price_in_block(text, ad: AdBlock):
         ad.set_save_dollars(ds_match.group(1), False)
     elif cs_match:
         ad.set_save_dollars(cs_match.group(1), True)
+    else:
+        do_second_catchall = True
 
-    raedo_match = RECEIVE_AN_EXTRA_PERCENTAGE_OFF.match(text, re.IGNORECASE)
+    if do_first_catchall and do_second_catchall:
+        if dp_match:
+            ad.set_dollar_price(dp_match.group(1), False)
+        elif cp_match:
+            ad.set_dollar_price(cp_match.group(1), True)
+
+    raedo_match = RECEIVE_AN_EXTRA_PERCENTAGE_OFF.search(text)
 
     if raedo_match:
         ad.set_percentage_off(raedo_match.group(1))
 
     if ad.uom is None:
-        lone_unit_match = LONE_UNITS.match(text, re.IGNORECASE)
-        ad.uom = lone_unit_match.group(1)
+        lone_unit_match = LONE_UNITS.search(text)
+        if lone_unit_match:
+            ad.uom = lone_unit_match.group(1)
 
     return found_some_price_thing

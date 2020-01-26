@@ -7,11 +7,14 @@ import os
 from multiprocessing.pool import Pool
 import time
 
+from ad_block import AdBlock
+from price_string_matching import match_price_in_block
+
 
 df_products = pd.read_csv("files/product_dictionary.csv")
-images_path = "test_images"
+images_path = "files/cleaned_images"
 ocrs_path = "files/ocr"
-save_path = "files/products_testing"
+save_path = "files/products"
 images = os.listdir(images_path)
 
 
@@ -163,7 +166,6 @@ def match_products(products, paragraphs, blocks):
 
         if max_score > 90:
             matched_products.append([product, best_match, paragraphs[i], blocks[i]])
-            # print('{} | {} | {}'.format(product, best_match, max_score))
 
     return matched_products
 
@@ -172,18 +174,28 @@ def identify_products(images):
     labels = []
     start_time = time.time()
 
+    data = []
+    columns = [
+        "flyer_name",
+        "product_name",
+        "unit_promo_price",
+        "uom",
+        "least_unit_for_promo",
+        "save_per_unit",
+        "discount",
+        "organic",
+    ]
+
     for count, flyer in enumerate(images):
         title = flyer[:-4]
         ocr_path = os.path.join(ocrs_path, title + "_WORD_BLOCK.json")
         image_path = os.path.join(images_path, flyer)
 
         products, paragraphs, blocks = extract_products(ocr_path, image_path)
-        # [print(product) for product in products]
 
         matched_products = match_products(products, paragraphs, blocks)
 
         final_products = remove_duplicates(matched_products)
-        # [print('{} : {}'.format(product[0], product[1])) for product in final_products]
         labels.append([[title, product[1]] for product in final_products])
 
         blocks = []
@@ -193,22 +205,50 @@ def identify_products(images):
             block["productText"] = product[0]
             blocks.append(block)
 
+        for i in range(len(blocks)):
+            block_text = ""
+            for paragraph in blocks[i]["paragraphs"]:
+                for word in paragraph["words"]:
+                    word_text = ""
+                    for symbol in word["symbols"]:
+                        word_text += symbol["text"]
+                        if (
+                            "property" in symbol
+                            and "detectedBreak" in symbol["property"]
+                        ):
+                            word_text += " "
+
+                    block_text += word_text
+
+            blocks[i]["text"] = block_text
+
+        for block in blocks:
+            ad = AdBlock(title, block["product"])
+            found_some_price_thing = match_price_in_block(block["text"], ad)
+            ad.combine_information()
+            data.append(ad.get_row())
+
         flyer_json = {}
         flyer_json["blocks"] = blocks
 
         with open(os.path.join(save_path, title + ".json"), "w") as f:
             json.dump(flyer_json, f)
 
+    df = pd.DataFrame(data, columns=columns)
+    df.to_csv("output.csv", index=False)
+
 
 if __name__ == "__main__":
-    pool_images = [images[: min(i * 16, len(images))] for i in range(14)]
-    pool = Pool(processes=8, maxtasksperchild=1000)
-    i = 0
-    for _ in pool.imap_unordered(identify_products, pool_images, chunksize=16):
-        i += 1
+    # pool_images = [images[: min(i * 16, len(images))] for i in range(14)]
+    # pool = Pool(processes=8, maxtasksperchild=1000)
+    # i = 0
+    # for _ in pool.imap_unordered(identify_products, pool_images, chunksize=16):
+    #     i += 1
+    #
+    #     if i % 10 == 0:
+    #         print(f"{i}/{len(images)}")
+    #
+    # pool.close()
+    # pool.join()
 
-        if i % 10 == 0:
-            print(f"{i}/{len(images)}")
-
-    pool.close()
-    pool.join()
+    identify_products(["week_10_page_1.jpg"])

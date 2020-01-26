@@ -8,7 +8,7 @@ class AdBlock:
         self.least_unit_for_promo = 1
         self.save_per_unit = None
         self.discount = None
-        self.organic = "organic" in product_name.to_lowercase()
+        self.organic = 1 if "organic" in product_name.lower() else 0
 
         self.dollar_off = None
 
@@ -90,3 +90,24 @@ class AdBlock:
             self.discount = self.save_per_unit / (self.unit_promo_price + self.save_per_unit)
         except:
             pass
+
+        if self.unit_promo_price and isinstance(self.unit_promo_price, float):
+            self.unit_promo_price = "{0:.2f}".format(self.unit_promo_price)
+
+        if self.save_per_unit and isinstance(self.save_per_unit, float):
+            self.save_per_unit = "{0:.2f}".format(self.save_per_unit)
+
+        if self.discount and isinstance(self.discount, float):
+            self.discount = "{0:.2f}".format(self.discount)
+
+    def get_row(self):
+        return [
+            self.flyer_name,
+            self.product_name,
+            self.unit_promo_price,
+            self.uom,
+            self.least_unit_for_promo,
+            self.save_per_unit,
+            self.discount,
+            self.organic
+        ]
