@@ -36,8 +36,8 @@ CENT_OFF = re.compile(r"([0-9]+)¢\sOFF")
 
 
 # Savings
-SAVE_CENTS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}([0-9]+)¢ on ([0-9]+)/(" + "|".join(get_units()) + r")")  # SAVE (up to) 98¢ on 2/lb
-SAVE_DOLLARS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}\$([0-9]+) on ([0-9]+)/(" + "|".join(get_units()) + r")")
+SAVE_CENTS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}([0-9]+)¢/(" + "|".join(get_units()) + r") on ([0-9]+)")  # SAVE (up to) 98¢ on 2/lb
+SAVE_DOLLARS_ON_PER_UNIT = re.compile(r"SAVE.{0,7}\$([0-9]+)/(" + "|".join(get_units()) + r") on ([0-9]+)")
 
 DOLLAR_SAVE_PER_UNIT = re.compile(r"SAVE.{0,7}\$([0-9]+)/(" + "|".join(get_units()) + r")")
 CENT_SAVE_PER_UNIT = re.compile(r"SAVE.{0,7}([0-9]+)¢/(" + "|".join(get_units()) + r")")
@@ -109,18 +109,18 @@ def match_price_in_block(text, ad: AdBlock):
     cs_match = CENT_SAVE.match(text, re.IGNORECASE)
 
     if sdopu_match:
-        pass
+        ad.set_save_dollars_per_unit_on_units(sdopu_match.group(1), sdopu_match.group(2), sdopu_match.group(3), False)
     elif scopu_match:
-        pass
+        ad.set_save_dollars_per_unit_on_units(scopu_match.group(1), scopu_match.group(2), scopu_match.group(3), True)
     elif dspu_match:
-        pass
+        ad.set_save_dollars_per_unit(dspu_match.group(1), dspu_match.group(2), False)
     elif cspu_match:
-        pass
+        ad.set_save_dollars_per_unit(cspu_match.group(1), cspu_match.group(2), True)
     elif sdo_match:
-        pass
+        ad.set_save_dollars_on_units(sdo_match.group(1), sdo_match.group(2), False)
     elif sco_match:
-        pass
+        ad.set_save_dollars_on_units(sco_match.group(1), sco_match.group(2), True)
     elif ds_match:
-        pass
+        ad.set_save_dollars(ds_match.group(1), False)
     elif cs_match:
-        pass
+        ad.set_save_dollars(cs_match.group(1), True)
