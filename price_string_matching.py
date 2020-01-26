@@ -90,11 +90,11 @@ def match_price_in_block(text, ad: AdBlock):
     if dppu_match:
         ad.set_dollar_price_per_unit(dppu_match.group(1), dppu_match.group(2), False)
     elif cppu_match:
-        ad.set_dollar_price_per_unit(cppu_match.group(1), dppu_match.group(2), True)
+        ad.set_dollar_price_per_unit(cppu_match.group(1), cppu_match.group(2), True)
     elif updp_match:
         ad.set_units_per_price(updp_match.group(1), updp_match.group(2), False)
     elif upcp_match:
-        ad.set_units_per_price(upcp_match.group(1), updp_match.group(2), True)
+        ad.set_units_per_price(upcp_match.group(1), upcp_match.group(2), True)
     elif bogo_match:
         ad.set_buy_get_one_free()
     elif ho_match:

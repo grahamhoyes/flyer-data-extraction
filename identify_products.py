@@ -190,6 +190,7 @@ def identify_products(images):
         title = flyer[:-4]
         ocr_path = os.path.join(ocrs_path, title + "_WORD_BLOCK.json")
         image_path = os.path.join(images_path, flyer)
+        image = Image.open(image_path)
 
         products, paragraphs, blocks = extract_products(ocr_path, image_path)
 
@@ -205,11 +206,15 @@ def identify_products(images):
             block["productText"] = product[0]
             blocks.append(block)
 
+        red_blocks = []
         for i in range(len(blocks)):
             block_text = ""
+            num_red_words = 0
+            num_words = 0
             for paragraph in blocks[i]["paragraphs"]:
                 for word in paragraph["words"]:
                     word_text = ""
+                    num_words += 1
                     for symbol in word["symbols"]:
                         word_text += symbol["text"]
                         if (
@@ -220,11 +225,38 @@ def identify_products(images):
 
                     block_text += word_text
 
+                    if check_color(image, word, "red"):
+                        num_red_words += 1
+
             blocks[i]["text"] = block_text
+
+            if num_red_words / num_words > 0.7:
+                red_blocks.append(blocks[i])
 
         for block in blocks:
             ad = AdBlock(title, block["product"])
             found_some_price_thing = match_price_in_block(block["text"], ad)
+
+            if not found_some_price_thing:
+                block_top = min(v["y"] for v in block["boundingBox"]["vertices"])
+                min_dist = 10000000000
+                closest_red_block = None
+                for i in range(len(red_blocks)):
+                    if not red_blocks[i]:
+                        continue
+
+                    red_block_bottom = max(v["y"] for v in red_blocks[i]["boundingBox"]["vertices"])
+                    dist = block_top - red_block_bottom
+
+                    if dist >= 0 and dist < min_dist:
+                        min_dist = dist
+                        closest_red_block = red_blocks[i]
+
+                    red_blocks[i] = None
+
+                if closest_red_block is not None:
+                    _ = match_price_in_block(closest_red_block["text"], ad)
+
             ad.combine_information()
             data.append(ad.get_row())
 
@@ -251,4 +283,5 @@ if __name__ == "__main__":
     # pool.close()
     # pool.join()
 
-    identify_products(images[:10])
+    # identify_products(images[:10])
+    identify_products(["week_1_page_1.jpg"])
