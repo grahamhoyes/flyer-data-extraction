@@ -73,10 +73,11 @@ def check_fontsize(box):
     return max_y - min_y >= min_height and max_y - min_y <= max_height
 
 
-def extract_products(ocr_path, image_path):
+def identify_products(ocr_path, image_path):
     """
     :param ocr_path: Path to an OCR JSON output file
-    :return:
+    :param image_path: path to flyer image
+    :return: product names
     """
     products = []
 
@@ -99,9 +100,10 @@ def extract_products(ocr_path, image_path):
                 for word in paragraph["words"]:
                     word_text = "".join([symbol["text"] for symbol in word["symbols"]])
 
-                    if check_fontsize(word['boundingBox']) and check_color(image, word, 'black')
-                        text += "".join(word_text) + " "
-                        add_to_prod = True
+                    if check_fontsize(word['boundingBox']):
+                        if check_color(image, word, 'black'):
+                            text += "".join(word_text) + " "
+                            add_to_prod = True
                 
                 if add_to_prod:
                     products.append(text)
@@ -110,5 +112,5 @@ def extract_products(ocr_path, image_path):
 
 
 if __name__ == "__main__":
-    products = extract_products("files/ocr/week_10_page_1_BLOCK_WORD.json", 'test_images/week_10_page_1.jpg')
+    products = identify_products("files/ocr/week_10_page_1_BLOCK_WORD.json", 'test_images/week_10_page_1.jpg')
     [print(product) for product in products]
