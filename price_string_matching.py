@@ -180,3 +180,65 @@ def match_price_in_block(text, ad: AdBlock):
             ad.uom = lone_unit_match.group(1)
 
     return found_some_price_thing
+
+
+def match_red_string(text):
+
+    method, args = None, ()
+
+    # Prices
+    dppu_match = DOLLAR_PRICE_PER_UNIT.search(text)
+    cppu_match = CENT_PRICE_PER_UNIT.search(text)
+    updp_match = UNITS_PER_DOLLAR_PRICE.search(text)
+    upcp_match = UNITS_PER_CENT_PRICE.search(text)
+    dp_match = DOLLAR_PRICE.search(text)
+    cp_match = CENT_PRICE.search(text)
+    bogo_match = BUY_ONE_GET_ONE_FREE.search(text)
+    ho_match = HALF_OFF.search(text)
+    po_match = PERCENTAGE_OFF.search(text)
+    dopp_match = DOLLAR_OFF_PER_POUND.search(text)
+    copp_match = CENT_OFF_PER_POUND.search(text)
+    do_match = DOLLAR_OFF.search(text)
+    co_match = CENT_OFF.search(text)
+
+    if dppu_match:
+        method = AdBlock.set_dollar_price_per_unit
+        args = (dppu_match.group(1), dppu_match.group(2), False)
+    elif cppu_match:
+        method = AdBlock.set_dollar_price_per_unit
+        args = (cppu_match.group(1), dppu_match.group(2), True)
+    elif updp_match:
+        method = AdBlock.set_units_per_price
+        args = (updp_match.group(1), updp_match.group(2), False)
+    elif upcp_match:
+        method = AdBlock.set_units_per_price
+        args = (upcp_match.group(1), updp_match.group(2), True)
+    elif bogo_match:
+        method = AdBlock.set_buy_get_one_free
+        args = ()
+    elif ho_match:
+        method = AdBlock.set_half_off
+        args = ()
+    elif po_match:
+        method = AdBlock.set_percentage_off
+        args = (po_match.group(1))
+    elif dopp_match:
+        method = AdBlock.set_dollar_off_per_pound
+        args = (dopp_match.group(1), False)
+    elif copp_match:
+        method = AdBlock.set_dollar_off_per_pound
+        args = (copp_match.group(1), True)
+    elif do_match:
+        method = AdBlock.set_dollar_off
+        args = (do_match.group(1), False)
+    elif co_match:
+        method = AdBlock.set_dollar_off
+        args = (co_match.group(1), True)
+    elif dp_match:
+        method = AdBlock.set_dollar_price
+        args = (dp_match.group(1), False)
+    elif cp_match:
+        method = AdBlock.set_dollar_price
+        args = (cp_match.group(1), True)
+    
+    return method, args
