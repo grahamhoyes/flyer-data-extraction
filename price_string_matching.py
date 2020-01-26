@@ -19,12 +19,17 @@ BUY_ONE_GET_ONE_FREE = re.compile(r'FREE')
 HALF_OFF = re.compile(r'HALF\sOFF!')
 PERCENTAGE_OFF = re.compile(r'([0-9]+)%\sOFF')
 
+DOLLAR_OFF_PER_POUND = re.compile(r'\$([0-9]+)\sOFF\sPER\sPOUND')
+CENT_OFF_PER_POUND = re.compile(r'([0-9]+)¢\sOFF\sPER\sPOUND')
+
+SAVE_CENTS_ON_UP_TO = re.compile(r'SAVE ([0-9]+)¢ on up to ([0-9]+)')  # SAVE 98¢ on up to 2
+SAVE_DOLLARS_ON_UP_TO = re.compile(r'SAVE \$([0-9]+) on up to ([0-9]+)')
+
+DOLLAR_SAVE = re.compile(r'SAVE.{0,7}\$([0-9]+)')
+CENT_SAVE = re.compile(r'SAVE.{0,7}([0-9]+)¢')
+
 DOLLAR_PRICE = re.compile(r'\$([0-9]+)')
 CENT_PRICE = re.compile(r'([0-9]+)¢')
 
 DOLLAR_OFF = re.compile(r'\$([0-9]+)\sOFF')
 CENT_OFF = re.compile(r'([0-9]+)¢\sOFF')
-
-DOLLAR_OFF_PER_POUND = re.compile(r'\$([0-9]+)\sOFF\sPER\sPOUND')
-CENT_OFF_PER_POUND = re.compile(r'([0-9]+)¢\sOFF\sPER\sPOUND')
-
