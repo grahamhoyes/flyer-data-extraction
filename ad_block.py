@@ -1,8 +1,8 @@
 class AdBlock:
 
-    def __init__(self):
-        self.flyer_name = ""
-        self.product_name = ""
+    def __init__(self, flyer_name, product_name):
+        self.flyer_name = flyer_name
+        self.product_name = product_name
         self.unit_promo_price = ""
         self.uom = ""
         self.least_unit_for_promo = ""
