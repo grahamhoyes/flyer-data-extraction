@@ -8,6 +8,10 @@ def get_units():
     units = df_units["units"].values
     return units
 
+# Units
+LONE_UNITS = re.compile(
+    r"((?:[0-9]+)\s(?:" + "|".join(get_units()) + r"))"
+)
 
 # Prices
 DOLLAR_PRICE_PER_UNIT = re.compile(
@@ -146,5 +150,9 @@ def match_price_in_block(text, ad: AdBlock):
 
     if raedo_match:
         ad.set_percentage_off(raedo_match.group(1))
+
+    if ad.uom is None:
+        lone_unit_match = LONE_UNITS.match(text, re.IGNORECASE)
+        ad.uom = lone_unit_match.group(1)
 
     return found_some_price_thing
