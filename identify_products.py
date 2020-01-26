@@ -1,4 +1,3 @@
-
 import json
 import numpy as np
 import pandas as pd
@@ -6,7 +5,7 @@ from PIL import Image
 from fuzzywuzzy import fuzz
 import os
 from multiprocessing.pool import Pool
-import time 
+import time
 
 
 df_products = pd.read_csv("files/product_dictionary.csv")
@@ -20,21 +19,20 @@ red = np.array([228, 23, 43])
 black = np.array([37, 35, 36])
 grey = np.array([79, 77, 78])
 
-colors = {'red': red, 
-            'black': black,
-            'grey': grey}
+colors = {"red": red, "black": black, "grey": grey}
 
-epsilons = {'red': 45,
-            'black': 30,
-            'grey': 18}
+epsilons = {"red": 45, "black": 30, "grey": 18}
 
 min_height = 38
 max_height = 66
 
 
 def color_percentage(word, color):
-    return (np.abs(word - colors[color]) <= epsilons[color]).all(axis=2).sum()/word.size
-    
+    return (np.abs(word - colors[color]) <= epsilons[color]).all(
+        axis=2
+    ).sum() / word.size
+
+
 def get_main_color(image, box):
     """
     :param image: An image
@@ -56,19 +54,18 @@ def get_main_color(image, box):
     im = np.array(cropped)
 
     max_percent = 0
-    word_color = ''
+    word_color = ""
     for color in colors.keys():
         percent = color_percentage(im, color)
         if percent > max_percent:
             word_color = color
             max_percent = percent
 
-
     return word_color, max_percent
 
 
 def check_color(image, word, color):
-    word_color, percent = get_main_color(image, word['boundingBox']['vertices'])
+    word_color, percent = get_main_color(image, word["boundingBox"]["vertices"])
     return percent > 0.02 and word_color == color
 
 
@@ -76,10 +73,10 @@ def check_fontsize(box):
     min_y = np.inf
     max_y = 0
 
-    for vertex in box['vertices']:
-        min_y = min(min_y, vertex['y'])
-        max_y = max(max_y, vertex['y'])
-    
+    for vertex in box["vertices"]:
+        min_y = min(min_y, vertex["y"])
+        max_y = max(max_y, vertex["y"])
+
     return max_y - min_y >= min_height and max_y - min_y <= max_height
 
 
@@ -97,7 +94,6 @@ def extract_products(ocr_path, image_path):
 
     image = Image.open(image_path)
 
-
     for page in data["fullTextAnnotation"]["pages"]:
         for block in page["blocks"]:
             if block["confidence"] < 0.9:
@@ -109,17 +105,18 @@ def extract_products(ocr_path, image_path):
                 for word in paragraph["words"]:
                     word_text = "".join([symbol["text"] for symbol in word["symbols"]])
 
-                    if check_fontsize(word['boundingBox']):
-                        if check_color(image, word, 'black'):
-                            text += "".join(word_text) + " "
+                    if check_fontsize(word["boundingBox"]):
+                        if check_color(image, word, "black"):
+                            text += word_text + " "
                             add_to_prod = True
-                
+
                 if add_to_prod:
                     products.append(text.strip())
                     paragraphs.append(paragraph)
                     blocks.append(block)
 
     return products, paragraphs, blocks
+
 
 def remove_duplicates(products):
     matches = {}
@@ -130,15 +127,15 @@ def remove_duplicates(products):
             matches[category] = [product]
         else:
             matches[category].append(product)
-    
+
     final_products = []
     for category in matches.keys():
         largest_block_area = 0
 
         for product in matches[category]:
             block = product[-1]
-            box = block['boundingBox']['vertices']
-            
+            box = block["boundingBox"]["vertices"]
+
             left = min(v["x"] for v in box)
             top = min(v["y"] for v in box)
             right = max(v["x"] for v in box)
@@ -149,8 +146,9 @@ def remove_duplicates(products):
             if area > largest_block_area:
                 largest_block_area = area
                 final_products.append(product)
-    
+
     return final_products
+
 
 def match_products(products, paragraphs, blocks):
     matched_products = []
@@ -162,7 +160,7 @@ def match_products(products, paragraphs, blocks):
             if score > max_score:
                 max_score = score
                 best_match = row["product_name"]
-            
+
         if max_score > 90:
             matched_products.append([product, best_match, paragraphs[i], blocks[i]])
             # print('{} | {} | {}'.format(product, best_match, max_score))
@@ -176,14 +174,14 @@ def identify_products(images):
 
     for count, flyer in enumerate(images):
         title = flyer[:-4]
-        ocr_path = os.path.join(ocrs_path, title + '_WORD_BLOCK.json')
+        ocr_path = os.path.join(ocrs_path, title + "_WORD_BLOCK.json")
         image_path = os.path.join(images_path, flyer)
 
         products, paragraphs, blocks = extract_products(ocr_path, image_path)
         # [print(product) for product in products]
 
         matched_products = match_products(products, paragraphs, blocks)
-        
+
         final_products = remove_duplicates(matched_products)
         # [print('{} : {}'.format(product[0], product[1])) for product in final_products]
         labels.append([[title, product[1]] for product in final_products])
@@ -191,19 +189,19 @@ def identify_products(images):
         blocks = []
         for product in final_products:
             block = product[-1]
-            block['product'] = product[1]
-            block['productText'] = product[0]
+            block["product"] = product[1]
+            block["productText"] = product[0]
             blocks.append(block)
 
         flyer_json = {}
-        flyer_json['blocks'] = blocks
+        flyer_json["blocks"] = blocks
 
-        with open(os.path.join(save_path, title + '.json'), 'w') as f:
+        with open(os.path.join(save_path, title + ".json"), "w") as f:
             json.dump(flyer_json, f)
-        
 
-if __name__ == '__main__':
-    pool_images = [images[:min(i*16, len(images))] for i in range(14)]
+
+if __name__ == "__main__":
+    pool_images = [images[: min(i * 16, len(images))] for i in range(14)]
     pool = Pool(processes=8, maxtasksperchild=1000)
     i = 0
     for _ in pool.imap_unordered(identify_products, pool_images, chunksize=16):
@@ -214,7 +212,3 @@ if __name__ == '__main__':
 
     pool.close()
     pool.join()
-
-
-
-
