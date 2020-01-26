@@ -12,7 +12,7 @@ def get_units():
 DOLLAR_PRICE_PER_UNIT = re.compile(r'\$([0-9]+)/(' + '|'.join(get_units()) + r')')
 CENT_PRICE_PER_UNIT = re.compile(r'([0-9]+)¢/(' + '|'.join(get_units()) + r')')
 
-UNITS_PER_DOLLAR_PRICE = re.compile(r'([0-9]+)/\($|¢)([0-9]+)')
+UNITS_PER_DOLLAR_PRICE = re.compile(r'([0-9]+)/\$([0-9]+)')
 UNITS_PER_CENT_PRICE = re.compile(r'([0-9]+)/([0-9]+)¢')
 
 BUY_ONE_GET_ONE_FREE = re.compile(r'FREE')
@@ -27,3 +27,4 @@ CENT_OFF = re.compile(r'([0-9]+)¢\sOFF')
 
 DOLLAR_OFF_PER_POUND = re.compile(r'\$([0-9]+)\sOFF\sPER\sPOUND')
 CENT_OFF_PER_POUND = re.compile(r'([0-9]+)¢\sOFF\sPER\sPOUND')
+
