@@ -83,11 +83,10 @@ class AdBlock:
             self.discount = 0.5
             if self.unit_promo_price is not None:
                 self.save_per_unit = self.unit_promo_price
+            if self.save_per_unit is not None:
+                self.unit_promo_price = self.save_per_unit
 
         try:
             self.discount = self.save_per_unit / (self.unit_promo_price + self.save_per_unit)
         except:
             pass
-
-
-
