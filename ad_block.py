@@ -5,7 +5,7 @@ class AdBlock:
         self.product_name = product_name
         self.unit_promo_price = ""
         self.uom = ""
-        self.least_unit_for_promo = ""
+        self.least_unit_for_promo = 1
         self.save_per_unit = ""
         self.discount = ""
         self.organic = ""
