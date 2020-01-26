@@ -46,7 +46,7 @@ class AdBlock:
 
     def set_percentage_off(self, discount):
         if self.is_percentage_off is True:
-            self.discount += discount
+            self.discount += float(discount)/100
             return
         self.is_percentage_off = True
         self.discount = float(discount)/100
