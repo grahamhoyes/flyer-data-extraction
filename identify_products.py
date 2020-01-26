@@ -92,6 +92,7 @@ def extract_products(ocr_path, image_path):
     products = []
     paragraphs = []
     blocks = []
+    non_product_blocks = []
     with open(ocr_path, "r") as fd:
         data = json.load(fd)
 
@@ -99,6 +100,7 @@ def extract_products(ocr_path, image_path):
 
     for page in data["fullTextAnnotation"]["pages"]:
         for block in page["blocks"]:
+            found_product = False
             if block["confidence"] < 0.9:
                 continue
 
@@ -112,13 +114,17 @@ def extract_products(ocr_path, image_path):
                         if check_color(image, word, "black"):
                             text += word_text + " "
                             add_to_prod = True
+                            found_product = True
 
                 if add_to_prod:
                     products.append(text.strip())
                     paragraphs.append(paragraph)
                     blocks.append(block)
 
-    return products, paragraphs, blocks
+            if not found_product:
+                non_product_blocks.append(block)
+
+    return products, paragraphs, blocks, non_product_blocks
 
 
 def remove_duplicates(products):
@@ -192,7 +198,7 @@ def identify_products(images):
         image_path = os.path.join(images_path, flyer)
         image = Image.open(image_path)
 
-        products, paragraphs, blocks = extract_products(ocr_path, image_path)
+        products, paragraphs, blocks, non_product_blocks = extract_products(ocr_path, image_path)
 
         matched_products = match_products(products, paragraphs, blocks)
 
@@ -206,15 +212,11 @@ def identify_products(images):
             block["productText"] = product[0]
             blocks.append(block)
 
-        red_blocks = []
         for i in range(len(blocks)):
             block_text = ""
-            num_red_words = 0
-            num_words = 0
             for paragraph in blocks[i]["paragraphs"]:
                 for word in paragraph["words"]:
                     word_text = ""
-                    num_words += 1
                     for symbol in word["symbols"]:
                         word_text += symbol["text"]
                         if (
@@ -225,10 +227,31 @@ def identify_products(images):
 
                     block_text += word_text
 
+            blocks[i]["text"] = block_text
+
+        red_blocks = []
+        for i in range(len(non_product_blocks)):
+            block_text = ""
+            num_red_words = 0
+            num_words = 0
+            for paragraph in non_product_blocks[i]["paragraphs"]:
+                for word in paragraph["words"]:
+                    word_text = ""
+                    num_words += 1
+                    for symbol in word["symbols"]:
+                        word_text += symbol["text"]
+                        if (
+                                "property" in symbol
+                                and "detectedBreak" in symbol["property"]
+                        ):
+                            word_text += " "
+
+                    block_text += word_text
+
                     if check_color(image, word, "red"):
                         num_red_words += 1
 
-            blocks[i]["text"] = block_text
+            non_product_blocks[i]["text"] = block_text
 
             if num_red_words / num_words > 0.7:
                 red_blocks.append(blocks[i])
@@ -283,5 +306,5 @@ if __name__ == "__main__":
     # pool.close()
     # pool.join()
 
-    # identify_products(images[:10])
-    identify_products(["week_1_page_1.jpg"])
+    identify_products(images)
+    # identify_products(["week_1_page_1.jpg"])
