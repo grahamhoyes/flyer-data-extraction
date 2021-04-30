@@ -44,7 +44,7 @@ python-dateutil==2.8.1
 python-Levenshtein==0.12.0
 pytz==2019.3
 requests==2.22.0
-rsa==4.0
+rsa==4.7
 six==1.14.0
 tensorboard==1.14.0
 tensorflow==1.14.0
