@@ -19,7 +19,7 @@ google-resumable-media==0.5.0
 grpcio==1.26.0
 h5py==2.10.0
 idna==2.8
-ipython==7.11.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 jedi==0.15.2
 Keras-Applications==1.0.8
